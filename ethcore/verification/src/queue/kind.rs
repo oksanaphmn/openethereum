@@ -84,11 +84,17 @@ pub mod blocks {
 		block::PreverifiedBlock,
 		errors::{EthcoreError as Error, BlockError},
 		verification::Unverified,
+		BlockNumber,
 	};
 	use log::{debug, warn};
 	use crate::verification::{verify_block_basic, verify_block_unordered};
 
 	use ethereum_types::{H256, U256};
+
+	// ! qiibee specific code
+	// ! IDs of first and last bad block
+	const INITIAL_BAD_BLOCK: BlockNumber = 340_891;
+	const LAST_BAD_BLOCK: BlockNumber = 513_381;
 
 	/// A mode for verifying blocks.
 	pub struct Blocks;
@@ -110,8 +116,15 @@ pub mod blocks {
 					Err((BlockError::TemporarilyInvalid(oob).into(), Some(input)))
 				},
 				Err(e) => {
-					warn!(target: "client", "Stage 1 block verification failed for {}: {:?}", input.hash(), e);
-					Err((e, Some(input)))
+					// ! qiibee specific code
+					// ? if error occurrs within this range, inside of this verification only
+					// ? we send Ok() since those blocks are actually fine					
+					if input.header.number() >= INITIAL_BAD_BLOCK && input.header.number() <= LAST_BAD_BLOCK {
+						Ok(input)
+					} else {
+						warn!(target: "client", "Stage 1 block verification failed for {}: {:?}", input.hash(), e);
+						Err((e, Some(input)))
+					}					
 				}
 			}
 		}
