@@ -123,7 +123,6 @@ pub mod blocks {
 					if input.header.number() >= INITIAL_BAD_BLOCK && input.header.number() <= LAST_BAD_BLOCK {
 						Ok(input)
 					} else {
-						warn!("it failed for ${}", input.header.number());
 						Err((e, Some(input)))
 					}					
 				}
