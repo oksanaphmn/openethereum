@@ -116,13 +116,13 @@ pub mod blocks {
 					Err((BlockError::TemporarilyInvalid(oob).into(), Some(input)))
 				},
 				Err(e) => {
-					warn!(target: "client", "Stage 1 block verification failed for {}: {:?}", input.hash(), e);
 					// ! qiibee specific code
 					// ? if error occurrs within this range, inside of this verification only
 					// ? we send Ok() since those blocks are actually fine					
 					if input.header.number() >= INITIAL_BAD_BLOCK && input.header.number() <= LAST_BAD_BLOCK {
 						Ok(input)
 					} else {
+						warn!(target: "client", "Stage 1 block verification failed for {}: {:?}", input.hash(), e);
 						Err((e, Some(input)))
 					}					
 				}
