@@ -150,7 +150,7 @@ You can show your logs in the test output by passing `--nocapture` (i.e. `cargo 
 
 ## 5. Documentation <a id="chapter-005"></a>
 
-Be sure to [check out our old wiki](https://wiki.parity.io) for more information.
+Be sure to [check out our old wiki](https://en.wikipedia.org/wiki/Parity) for more information.
 
 ### Viewing documentation for Open Ethereum packages
 
